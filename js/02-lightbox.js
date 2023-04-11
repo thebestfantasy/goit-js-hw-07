@@ -1,8 +1,6 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-console.log(galleryItems);
-
 const container = document.querySelector('.gallery');
 const markup = galleryItems.map(({ preview, original, description }) => `<li class="gallery__item">
    <a class="gallery__link" href="${original}">
@@ -11,15 +9,9 @@ const markup = galleryItems.map(({ preview, original, description }) => `<li cla
 </li>`);
 
 container.insertAdjacentHTML('beforeend', markup.join(''));
-container.addEventListener("click", onClick);
 
-function onClick(evt) {
-    evt.preventDefault();
-    if (!evt.target.classList.contains('gallery__image')) {
-        return
-    }
-    const descr = evt.target.alt;
-    console.log(descr);
-    const gallery = new SimpleLightbox('.gallery a');
-    gallery.on('show.simplelightbox', { captionsData: descr, captionPosition : 'bottom', captionDelay : 250 });
-}
+const caption = galleryItems.map(({ description }) => description);
+const gallery = new SimpleLightbox('.gallery a', {
+    captionsData: caption,
+    captionDelay: 250
+});
