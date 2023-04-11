@@ -3,8 +3,23 @@ import { galleryItems } from './gallery-items.js';
 
 console.log(galleryItems);
 
-const instance = basicLightbox.create(`
-    <h1>Dynamic Content</h1>
-    <p>You can set the content of the lightbox with JS.</p>
-`)
-instance.show();
+const container = document.querySelector('.gallery');
+const markup = galleryItems.map(({ preview, original, description }) => `<li class="gallery__item">
+   <a class="gallery__link" href="${original}">
+      <img class="gallery__image" src="${preview}" alt="${description}" />
+   </a>
+</li>`);
+
+container.insertAdjacentHTML('beforeend', markup.join(''));
+container.addEventListener("click", onClick);
+
+function onClick(evt) {
+    evt.preventDefault();
+    if (!evt.target.classList.contains('gallery__image')) {
+        return
+    }
+    const descr = evt.target.alt;
+    console.log(descr);
+    const gallery = new SimpleLightbox('.gallery a');
+    gallery.on('show.simplelightbox', { captionsData: descr, captionPosition : 'bottom', captionDelay : 250 });
+}

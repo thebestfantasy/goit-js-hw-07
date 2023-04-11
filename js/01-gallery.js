@@ -9,10 +9,20 @@ const markup = galleryItems.map(({ preview, original, description }) => `<li cla
 container.insertAdjacentHTML('beforeend', markup.join(''));
 container.addEventListener("click", onClick);
 
-console.log(container);
-
 function onClick(evt) {
     evt.preventDefault();
-    console.log(evt.target);
+    if (!evt.target.classList.contains('gallery__image')) {
+        return
+    }
+    const originalImg = evt.target.dataset.source; 
+    const descr = evt.target.alt;
+    const instance = basicLightbox.create(`
+    <div><img class="modal__image" src="${originalImg} alt="${descr}"></div>`);
+    instance.show();
+    evt.target.addEventListener("keydown", onClose);
+}
+
+function onClose(evt) {
+    evt.key === "Escape" ? instance.close() : false
 }
 
